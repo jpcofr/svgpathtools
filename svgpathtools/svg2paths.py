@@ -5,7 +5,6 @@ The main tool being the svg2paths() function."""
 from __future__ import division, absolute_import, print_function
 from xml.dom.minidom import parse
 from os import path as os_path, getcwd
-from shutil import copyfile
 
 # Internal dependencies
 from .parser import parse_path
@@ -73,6 +72,7 @@ def ellipse2pathd(ellipse):
     d += 'a' + str(rx) + ',' + str(ry) + ' 0 1,0 ' + str(-2 * rx) + ',0'
 
     return d
+	
 def svg2paths(svg_file_location,
               convert_lines_to_paths=True,
               convert_polylines_to_paths=True,
@@ -96,15 +96,10 @@ def svg2paths(svg_file_location,
     objects (converted to Paths)
     :return: list of Path objects, list of path attribute dictionaries, and
     (optionally) a dictionary of svg-attributes
-
     """
     if os_path.dirname(svg_file_location) == '':
         svg_file_location = os_path.join(getcwd(), svg_file_location)
 
-    # if pathless_svg:
-    #     copyfile(svg_file_location, pathless_svg)
-    #     doc = parse(pathless_svg)
-    # else:
     doc = parse(svg_file_location)
 
     def dom2dict(element):
@@ -117,9 +112,6 @@ def svg2paths(svg_file_location,
     paths = [dom2dict(el) for el in doc.getElementsByTagName('path')]
     d_strings = [el['d'] for el in paths]
     attribute_dictionary_list = paths
-    # if pathless_svg:
-    #     for el in doc.getElementsByTagName('path'):
-    #         el.parentNode.removeChild(el)
 
     # Use minidom to extract polyline strings from input SVG, convert to
     # path strings, add to list
@@ -147,9 +139,6 @@ def svg2paths(svg_file_location,
         d_strings += [ellipse2pathd(e) for e in ellipses]
         attribute_dictionary_list += ellipses
 
-    # if pathless_svg:
-    #     with open(pathless_svg, "wb") as f:
-    #         doc.writexml(f)
 
     if return_svg_attributes:
         svg_attributes = dom2dict(doc.getElementsByTagName('svg')[0])
