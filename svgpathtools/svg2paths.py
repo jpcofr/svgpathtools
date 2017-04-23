@@ -53,6 +53,33 @@ def ellipse2pathd(ellipse):
     return d
 
 
+def ellipse2pathd(ellipse):
+    """converts the parameters from an ellipse or a circle to a string for a Path
+    object d-attribute"""
+
+    cx = ellipse.get('cx', None)
+    cy = ellipse.get('cy', None)
+    rx = ellipse.get('rx', None)
+    ry = ellipse.get('ry', None)
+    r = ellipse.get('r', None)
+
+    if r is not None:
+        rx = ry = float(r)
+    else:
+        rx = float(rx)
+        ry = float(ry)
+
+    cx = float(cx)
+    cy = float(cy)
+
+    d = ''
+    d += 'M' + str(cx - rx) + ',' + str(cy)
+    d += 'a' + str(rx) + ',' + str(ry) + ' 0 1,0 ' + str(2 * rx) + ',0'
+    d += 'a' + str(rx) + ',' + str(ry) + ' 0 1,0 ' + str(-2 * rx) + ',0'
+
+    return d
+
+
 def polygon2pathd(polyline_d):
     """converts the string from a polygon points-attribute to a string for a
     Path object d-attribute.
