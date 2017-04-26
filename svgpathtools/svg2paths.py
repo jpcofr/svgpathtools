@@ -27,7 +27,7 @@ def polyline2pathd(polyline_d):
     return d
 
 def ellipse2pathd(ellipse):
-    """converts the parameters from an ellipse or a circle to a string for a 
+    """converts the parameters from an ellipse or a circle to a string for a
     Path object d-attribute"""
 
     cx = ellipse.get('cx', None)
@@ -82,7 +82,7 @@ def svg2paths(svg_file_location,
               convert_polylines_to_paths=True,
               convert_polygons_to_paths=True,
               convert_ellipses_to_paths=True):
-    """Converts an SVG into a list of Path objects and attribute dictionaries. 
+    """Converts an SVG into a list of Path objects and attribute dictionaries.
 
     Converts an SVG file into a list of Path objects and a list of
     dictionaries containing their attributes.  This currently supports
@@ -101,7 +101,7 @@ def svg2paths(svg_file_location,
         convert_ellipses_to_paths (bool): Set to False to exclude SVG-Ellipse
             objects (converted to Paths). Circles are treated as ellipses.
 
-    Returns: 
+    Returns:
         list: The list of Path objects.
         list: The list of corresponding path attribute dictionaries.
         dict (optional): A dictionary of svg-attributes (see `svg2paths2()`).
@@ -110,35 +110,43 @@ def svg2paths(svg_file_location,
         svg_file_location = os_path.join(getcwd(), svg_file_location)
 
     return dom2path(parse(svg_file_location),
+                    return_svg_attributes,
                     convert_lines_to_paths,
                     convert_polylines_to_paths,
                     convert_polygons_to_paths,
-                    return_svg_attributes,
                     convert_ellipses_to_paths)
 
 def dom2path(doc,
-             convert_lines_to_paths=True,
-             convert_polylines_to_paths=True,
-             convert_polygons_to_paths=True,
-             return_svg_attributes=False,
-             convert_ellipses_to_paths=True):
+             return_svg_attributes,
+             convert_lines_to_paths,
+             convert_polylines_to_paths,
+             convert_polygons_to_paths,
+             convert_ellipses_to_paths):
     """
-    Converts a DOM element into a list of Path objects and a list of
+    Converts a DOM document into a list of Path objects and attribute
+    dictionaries.
+
+    Converts a DOM document into a list of Path objects and a list of
     dictionaries containing their attributes.  This currently supports
-    SVG Path, Line, Polyline, Circle and Ellipse, and Polygon elements.
-    :param svg_file_location: the location of the svg file
-    :param convert_lines_to_paths: Set to False to disclude SVG-Line objects
-    (converted to Paths)
-    :param convert_polylines_to_paths: Set to False to disclude SVG-Polyline
-    objects (converted to Paths)
-    :param convert_polygons_to_paths: Set to False to disclude SVG-Polygon
-    objects (converted to Paths)
-    :param return_svg_attributes: Set to True and a dictionary of
-    svg-attributes will be extracted and returned
-    :param convert_ellipses_to_paths: Set to False to disclude SVG-Ellipse
-    objects (converted to Paths). Circles are treated as ellipses.
-    :return: list of Path objects, list of path attribute dictionaries, and
-    (optionally) a dictionary of svg-attributes
+    SVG Path, Line, Polyline, Polygon, Circle, and Ellipse elements.
+
+    Args:
+        doc (DOM): Document Object Model
+        convert_lines_to_paths (bool): Set to False to exclude SVG-Line objects
+            (converted to Paths)
+        convert_polylines_to_paths (bool): Set to False to exclude SVG-Polyline
+            objects (converted to Paths)
+        convert_polygons_to_paths (bool): Set to False to exclude SVG-Polygon
+            objects (converted to Paths)
+        return_svg_attributes (bool): Set to True and a dictionary of
+            svg-attributes will be extracted and returned
+        convert_ellipses_to_paths (bool): Set to False to exclude SVG-Ellipse
+            objects (converted to Paths). Circles are treated as ellipses.
+
+    Returns:
+        list: The list of Path objects.
+        list: The list of corresponding path attribute dictionaries.
+        dict (optional): A dictionary of svg-attributes (see `svg2paths2()`).
     """
     def dom2dict(element):
         """Converts DOM elements to dictionaries of attributes."""
